@@ -68,3 +68,28 @@ func TestMultiply(t *testing.T) {
 		}
 	}
 }
+
+func TestDivide(t *testing.T) {
+	t.Parallel()
+	type testCase struct {
+		name        string
+		a, b        float64
+		want        float64
+		errExpected bool
+	}
+	testCases := []testCase{
+		{name: "divide by zero", a: 6, b: 0, want: 0, errExpected: true},
+		{name: "divide two positives", a: 6, b: 2, want: 3, errExpected: false},
+		{name: "One divided by two is one-half", a: 1, b: 2, want: 0.5, errExpected: false},
+	}
+	for _, tc := range testCases {
+		got, err := calculator.Divide(tc.a, tc.b)
+		errReceived := err != nil
+		if tc.want != got {
+			t.Errorf("the test: %v failed, Divide(%f, %f): want %v, got %v", tc.name, tc.a, tc.b, tc.want, got)
+		}
+		if errReceived != tc.errExpected {
+			t.Errorf("the test: %v failed, Divide(%f, %f): unexpected error code, want %v, got %v", tc.name, tc.a, tc.b, tc.errExpected, got)
+		}
+	}
+}
